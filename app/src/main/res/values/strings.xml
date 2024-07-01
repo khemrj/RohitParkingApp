@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Online Parking Booking System</string>
+    <string name="welcome_user">Welcome To Parking System</string>
+    <string name="book_parking">Parking Booking</string>
+    <string name="view_place">Parking Place</string>
+    <string name="parking_capacity">Parking Capacity</string>
+    <string name="forgot_password">Forgot Password</string>
+</resources>
