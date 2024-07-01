@@ -8,16 +8,16 @@ import android.view.View;
 import android.widget.Button;
 
 public class Dashboard extends AppCompatActivity {
-private Button b;
+private Button registerParkingArea;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        b = findViewById(R.id.button3);
-        b.setOnClickListener(new View.OnClickListener() {
+        registerParkingArea = findViewById(R.id.btn_register);
+        registerParkingArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Dashboard.this,ParkingRate.class);
+                Intent intent = new Intent(Dashboard.this,RegisterParking.class);
                 startActivity(intent);
             }
         });

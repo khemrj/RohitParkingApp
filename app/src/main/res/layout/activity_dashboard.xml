@@ -37,7 +37,7 @@
                 app:layout_constraintVertical_bias="0.516" />
 
             <ImageButton
-                android:id="@+id/notification2"
+                android:id="@+id/profile"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/person"
@@ -64,7 +64,7 @@
                 app:layout_constraintVertical_bias="0.018" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/parkingNearMe"
                 android:layout_width="119dp"
                 android:layout_height="116dp"
                 android:backgroundTint="#070707"
@@ -80,7 +80,7 @@
                 app:layout_constraintVertical_bias="0.265" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/btn_register"
                 android:layout_width="119dp"
                 android:layout_height="116dp"
                 android:backgroundTint="#040303"
