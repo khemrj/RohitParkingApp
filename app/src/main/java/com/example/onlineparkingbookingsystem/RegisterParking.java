@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -20,13 +21,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegisterParking extends AppCompatActivity {
     private Button registerParkingArea;
     private EditText ownerName,address,phoneNo,parkingPlaceName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,8 @@ public class RegisterParking extends AppCompatActivity {
         registerParkingArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GeoCodeLocation locationAddress = new GeoCodeLocation();
+                locationAddress.getAddressFromLocation(address.getText().toString(), getApplicationContext(), new GeoCoderHandler());
              sendData();
 
             }
@@ -51,19 +57,18 @@ public class RegisterParking extends AppCompatActivity {
 
         final String[] Token = new String[1];
 
-        String url = "http://192.168.1.75:8080/rohit/place";
-        GeoCodeLocation locationAddress = new GeoCodeLocation();
-        locationAddress.getAddressFromLocation(address.getText().toString(), getApplicationContext(), new GeoCoderHandler());
+        String url = "http://192.168.1.73:8080/rohit/place";
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
-        String latitude =sharedPreferences.getString("latitude",null);
-        String longitude =sharedPreferences.getString("longitude",null);
+
         JSONObject jsonRequest = new JSONObject();
         try {
             jsonRequest.put("ownerName",ownerName.getText().toString());
             jsonRequest.put("placeName",parkingPlaceName.getText().toString());
             jsonRequest.put("phoneNumber",phoneNo.getText().toString());
             jsonRequest.put("address",address.getText().toString());
+            SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
+            String latitude =sharedPreferences.getString("latitude",null);
+            String longitude =sharedPreferences.getString("longitude",null);
             jsonRequest.put("latitude",latitude );
             jsonRequest.put("longitude",longitude);
         } catch (JSONException e) {
@@ -116,8 +121,6 @@ public class RegisterParking extends AppCompatActivity {
             editor.putString("latitude",parts[0]);
             editor.putString("longitude",parts[1]);
             editor.apply();
-
-
             Log.d("Location1",locationAddress);
 
         }

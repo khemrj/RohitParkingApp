@@ -88,6 +88,20 @@
     <!--        android:textAlignment="center"-->
     <!--        android:textColorHint="@color/black" />-->
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="319dp"
+        android:layout_height="39dp"
+        android:layout_marginRight="300dp"
+        android:text="Enter price per hour:"
+        android:textSize="24sp" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"/>
+
+
     <Button
         android:id="@+id/registerParkingArea"
         android:layout_width="327dp"
