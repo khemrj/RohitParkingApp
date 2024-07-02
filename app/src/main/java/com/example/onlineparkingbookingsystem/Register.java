@@ -56,7 +56,7 @@ public class Register extends AppCompatActivity {
 
         final String[] Token = new String[1];
 
-        String url = "http://192.168.1.73:8080/rohit/user";
+        String url = "http://192.168.9.113:8080/rohit/user";
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         JSONObject jsonRequest = new JSONObject();

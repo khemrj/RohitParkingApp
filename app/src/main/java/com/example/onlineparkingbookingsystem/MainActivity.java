@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     EditText phone;
     EditText password;
     Button loginButton;
-
     TextView signupText;
 
     @Override

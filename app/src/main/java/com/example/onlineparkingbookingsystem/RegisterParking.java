@@ -53,11 +53,14 @@ public class RegisterParking extends AppCompatActivity {
         });
     }
     public void sendData(){
+        SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
+        String latitude =sharedPreferences.getString("latitude",null);
+        String longitude =sharedPreferences.getString("longitude",null);
 
 
         final String[] Token = new String[1];
 
-        String url = "http://192.168.1.73:8080/rohit/place";
+        String url = "http://192.168.9.113:8080/rohit/place";
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         JSONObject jsonRequest = new JSONObject();
@@ -66,9 +69,6 @@ public class RegisterParking extends AppCompatActivity {
             jsonRequest.put("placeName",parkingPlaceName.getText().toString());
             jsonRequest.put("phoneNumber",phoneNo.getText().toString());
             jsonRequest.put("address",address.getText().toString());
-            SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
-            String latitude =sharedPreferences.getString("latitude",null);
-            String longitude =sharedPreferences.getString("longitude",null);
             jsonRequest.put("latitude",latitude );
             jsonRequest.put("longitude",longitude);
         } catch (JSONException e) {
@@ -98,8 +98,6 @@ public class RegisterParking extends AppCompatActivity {
         });
 
         requestQueue.add(jsonObjectRequest);
-
-
 
 
     }
