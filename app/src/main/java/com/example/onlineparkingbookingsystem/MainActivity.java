@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void stringRequest(){
-        String url = "http://192.168.1.73:8080/rohit/user/k/"+ phone.getText().toString();
+        String url = "http://192.168.1.23:8080/rohit/user/k/"+ phone.getText().toString();
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

@@ -12,15 +12,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,13 +32,33 @@ import java.util.List;
 
 public class RegisterParking extends AppCompatActivity {
     private Button registerParkingArea;
-    private EditText ownerName,address,phoneNo,parkingPlaceName;
-
+    private Double lat1, lon1;
+    private EditText ownerName, address, phoneNo, parkingPlaceName;
+    private LinearLayout container;
+    List<String> vehicleNamesList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_parking);
+
+        container = findViewById(R.id.LinearLayout);
+        getVehicleList();
+
+
+
+
+
+
+
+
+
+
+        SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
         registerParkingArea = findViewById(R.id.registerParkingArea);
         ownerName = findViewById(R.id.ownerName);
         address = findViewById(R.id.parkingAddress);
@@ -47,43 +70,38 @@ public class RegisterParking extends AppCompatActivity {
             public void onClick(View v) {
                 GeoCodeLocation locationAddress = new GeoCodeLocation();
                 locationAddress.getAddressFromLocation(address.getText().toString(), getApplicationContext(), new GeoCoderHandler());
-             sendData();
-
             }
         });
     }
-    public void sendData(){
+
+    public void sendData() {
         SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
-        String latitude =sharedPreferences.getString("latitude",null);
-        String longitude =sharedPreferences.getString("longitude",null);
+        String latitude = sharedPreferences.getString("latitude", null);
+        String longitude = sharedPreferences.getString("longitude", null);
 
-
-        final String[] Token = new String[1];
-
-        String url = "http://192.168.9.113:8080/rohit/place";
+        String url = "http://192.168.1.23:8080/rohit/place";
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         JSONObject jsonRequest = new JSONObject();
         try {
-            jsonRequest.put("ownerName",ownerName.getText().toString());
-            jsonRequest.put("placeName",parkingPlaceName.getText().toString());
-            jsonRequest.put("phoneNumber",phoneNo.getText().toString());
-            jsonRequest.put("address",address.getText().toString());
-            jsonRequest.put("latitude",latitude );
-            jsonRequest.put("longitude",longitude);
+            jsonRequest.put("ownerName", ownerName.getText().toString());
+            jsonRequest.put("placeName", parkingPlaceName.getText().toString());
+            jsonRequest.put("phoneNumber", phoneNo.getText().toString());
+            jsonRequest.put("address", address.getText().toString());
+            jsonRequest.put("latitude", latitude);
+            jsonRequest.put("longitude", longitude);
         } catch (JSONException e) {
-            Log.d("parkingArea",e.toString());
+            Log.d("parkingArea", e.toString());
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonRequest,new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     Toast.makeText(RegisterParking.this, "Registered", Toast.LENGTH_SHORT).show();
-                    Log.v("Response",response.toString());
-                    Intent intent = new Intent(RegisterParking.this,Dashboard.class);
+                    Log.v("Response", response.toString());
+                    Intent intent = new Intent(RegisterParking.this, Dashboard.class);
                     startActivity(intent);
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -91,16 +109,14 @@ public class RegisterParking extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("VolleyError",error.toString());
-
+                Log.e("VolleyError", error.toString());
                 Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
         requestQueue.add(jsonObjectRequest);
-
-
     }
+
     private class GeoCoderHandler extends Handler {
         @Override
         public void handleMessage(Message message) {
@@ -116,13 +132,73 @@ public class RegisterParking extends AppCompatActivity {
             SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             String[] parts = locationAddress.split(" ");
-            editor.putString("latitude",parts[0]);
-            editor.putString("longitude",parts[1]);
+            editor.putString("latitude", parts[0]);
+            editor.putString("longitude", parts[1]);
             editor.apply();
-            Log.d("Location1",locationAddress);
-
+            sendData();
+            Log.d("Location1", locationAddress);
         }
+    }
 
+    public void getVehicleList() {
+        String URL = "http://192.168.1.23:8080/rohit/category";
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                URL,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d("khem", "hey" + response.toString());
 
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                vehicleNamesList.add(jsonObject.getString("name"));
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                        // Update the UI after fetching the vehicle names
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateUIWithVehicleNames();
+                            }
+                        });
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("errorResponse", "Error: " + error.toString());
+                        // Handle error here
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private void updateUIWithVehicleNames() {
+        // Access each component in the list and create an EditText for each vehicle name
+        for (String vehicleName : vehicleNamesList) {
+            EditText editText = new EditText(this);
+            editText.setHint("Enter price per hour for " + vehicleName);
+
+            // Set layout parameters for the EditText
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(0, 16, 0, 16); // Add some margin
+            editText.setLayoutParams(params);
+
+            // Add the EditText to the container
+            container.addView(editText);
+        }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.onlineparkingbookingsystem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,12 +16,29 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class parkingNearMe extends AppCompatActivity {
     private Spinner spinner;
     private EditText location,to, from ;
+    private String lat, lon;
 
     Button button ;
+
 
 
     @Override
@@ -35,9 +54,9 @@ public class parkingNearMe extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 GeoCodeLocation locationAddress = new GeoCodeLocation();
-                locationAddress.getAddressFromLocation("Dhangadhi", getApplicationContext(), new GeoCoderHandler());
-                Intent intent = new Intent(parkingNearMe.this, donorPage.class);
-                startActivity(intent);
+                Log.d("locationone"," m"+location.getText().toString());
+                locationAddress.getAddressFromLocation(location.getText().toString(), getApplicationContext(), new GeoCoderHandler());
+
             }
         });
 
@@ -54,16 +73,24 @@ public class parkingNearMe extends AppCompatActivity {
                 default:
                     locationAddress = null;
             }
-            SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
             String[] parts = locationAddress.split(" ");
-            editor.putString("latitude11",parts[0]);
-            editor.putString("longitude11",parts[1]);
-            editor.apply();
+//            lat = parts[0];
+//            lon = parts[1];
+//            editor.putString("latitude11",parts[0]);
+//            editor.putString("longitude11",parts[1]);
+//            editor.apply();
+            Intent intent = new Intent(parkingNearMe.this, donorPage.class);
+            intent.putExtra("latitude", parts[0]);
+            intent.putExtra("longitude",parts[1]);
+            startActivity(intent);
             Log.d("Location1",locationAddress);
 
         }
 
 
     }
+
+
 }

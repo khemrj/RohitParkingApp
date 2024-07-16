@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -37,9 +38,19 @@ public class donorPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donor_page);
-        SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
-        String address = sharedPreferences.getString("address",null);
-        Log.d("sharedAddress","  "+address);
+
+        Intent intent = getIntent();
+        if(intent!= null) {
+            lat1 = Double.parseDouble(intent.getStringExtra("latitude"));
+            lon1 = Double.parseDouble(intent.getStringExtra("longitude"));
+        }
+        else{
+            Log.d("errorIntent","empty intent");
+        }
+
+//        SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
+//        String address = sharedPreferences.getString("address",null);
+       // Log.d("sharedAddress","  "+address);
 
         getNearestPlaces();
 //        RecyclerView recyclerView=findViewById(R.id.recyclerdonor);
@@ -58,11 +69,12 @@ public class donorPage extends AppCompatActivity {
 
     }
     public void  getNearestPlaces(){
-        SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
-        String lat1 = sharedPreferences.getString("latitude11",null);
-        String lon1 = sharedPreferences.getString("longitude11",null);
+        Log.d("intentlocation","lat"+lat1+" "+lon1);
+      //  SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
+//        String lat1 = sharedPreferences.getString("latitude11",null);
+//        String lon1 = sharedPreferences.getString("longitude11",null);
         Log.d("lat1","lat"+lat1+" "+lon1);
-        String URL ="http://192.168.9.113:8080/rohit/nearestPlace/"+lat1+"/"+lon1;
+        String URL ="http://192.168.1.23:8080/rohit/nearestPlace/"+lat1+"/"+lon1;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
@@ -74,11 +86,12 @@ public class donorPage extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++) {
                             // Get each JSONObject
                             try {
+                                Log.d("parkingPlaceResponce",response.toString());
                                 JSONObject jsonObject = response.getJSONObject(i);
                                 RecyclerView recyclerView=findViewById(R.id.recyclerdonor);
                                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-                                arrDonor.add(new ParkingPlaceModel(jsonObject.getString("placeName"),jsonObject.getString("address")));
+                                arrDonor.add(new ParkingPlaceModel(jsonObject.getString("placeName"),jsonObject.getString("address"),"2"));
                                 RecyclerDonorAdapter adapter=new RecyclerDonorAdapter(getApplicationContext(),arrDonor);
                                 recyclerView.setAdapter(adapter);
 

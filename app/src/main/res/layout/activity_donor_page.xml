@@ -19,7 +19,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="text"
-            android:text="DONOR"
+            android:text="parking places"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="48dp"

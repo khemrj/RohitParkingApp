@@ -1,10 +1,6 @@
 package com.example.onlineparkingbookingsystem;
 
 import android.content.Context;
-import android.content.Intent;
-import android.location.Location;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -25,7 +20,7 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
     @NonNull
     Context context;
     String imageButton;//EX09april
-    Button call;
+    Button accept;
     ArrayList<ParkingPlaceModel> arrDonor;
     RecyclerDonorAdapter(@NonNull Context context, ArrayList<ParkingPlaceModel> arrDonor) {
         this.context = context;
@@ -44,8 +39,9 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
         //here problem is showning don't treat position as fixed ;only use immedately and call 'holder.getAdapterPosition()' to look it up later in this fun public void onBindViewHolder(@NonNull ViewHolder holder, int position)
         int adapterPosition = holder.getAdapterPosition();
         holder.txtName.setText(arrDonor.get(position).placeName);
-        holder.txtPrice.setText(arrDonor.get(position).placeName);
+        holder.txtPrice.setText(arrDonor.get(position).distance);
         holder.txtLocation.setText(arrDonor.get(position).location);
+
 
         // Bind other data as before
 
@@ -92,7 +88,14 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
             imgContact = itemView.findViewById(R.id.imageContact);
             txtName = itemView.findViewById(R.id.name);
             txtLocation = itemView.findViewById(R.id.location);
-            txtPrice = itemView.findViewById(R.id.price);
+            txtPrice = itemView.findViewById(R.id.distance);
+            accept = itemView.findViewById(R.id.acceptButton);
+            accept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context.getApplicationContext(), "paisa tir paila", Toast.LENGTH_LONG).show();
+                }
+            });
 
 
             // Set OnClickListener for the ImageButton
