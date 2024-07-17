@@ -101,7 +101,7 @@
         android:id="@+id/LinearLayout"
         android:layout_width="match_parent"
         android:layout_height="289dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="10dp" />
 
 

@@ -74,7 +74,7 @@ public class donorPage extends AppCompatActivity {
 //        String lat1 = sharedPreferences.getString("latitude11",null);
 //        String lon1 = sharedPreferences.getString("longitude11",null);
         Log.d("lat1","lat"+lat1+" "+lon1);
-        String URL ="http://192.168.1.23:8080/rohit/nearestPlace/"+lat1+"/"+lon1;
+        String URL ="http://192.168.1.69:8080/rohit/nearestPlace/"+lat1+"/"+lon1;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,

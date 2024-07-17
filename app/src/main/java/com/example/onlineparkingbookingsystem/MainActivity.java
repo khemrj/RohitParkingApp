@@ -2,7 +2,9 @@ package com.example.onlineparkingbookingsystem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,7 +32,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
     EditText phone;
-    EditText password;
+    EditText etpassword;
     Button loginButton;
     TextView signupText;
 
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         phone = findViewById(R.id.number);
-        password = findViewById(R.id.password);
+        etpassword = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
         signupText= findViewById(R.id.signupText);
 
@@ -56,13 +58,13 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //stringRequest();
+                stringRequest();
             }
         });
     }
 
     public void stringRequest(){
-        String url = "http://192.168.1.23:8080/rohit/user/k/"+ phone.getText().toString();
+        String url = "http://192.168.1.69:8080/rohit/user/k/"+ phone.getText().toString();
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -71,7 +73,17 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"This number does not exists",Toast.LENGTH_LONG).show();
                 }
                 else {
-                    if(response.equals(password.getText().toString())) {
+                    String[] parts = response.toString().split(" ");
+                    String password = parts[0];
+                    String id = parts[1];
+                    String pass = parts[2];
+                    SharedPreferences sharedPreferences = getSharedPreferences("url_prefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("userId",id);
+                    editor.putString("password", pass);
+                    editor.apply();
+
+                    if(password.equals(etpassword.getText().toString())) {
                         Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this,Dashboard.class);
                         startActivity(intent);

@@ -34,6 +34,20 @@
         />
 
     <EditText
+        android:id="@+id/email2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/custom_edittext"
+        android:drawableLeft="@drawable/email"
+        android:drawablePadding="8dp"
+        android:hint="E-mail"
+        android:textColor="@color/black"
+        android:textColorHighlight="@color/cardview_dark_background">
+
+    </EditText>
+
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:id="@+id/profile_number"
@@ -45,8 +59,8 @@
         android:textColor="@color/black"
         android:textColorHighlight="@color/cardview_dark_background"
         android:layout_marginTop="15dp"
-        android:enabled="false"
         />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -82,10 +96,5 @@
         android:id="@+id/logout_btn"
         android:textStyle="bold"
         />
-
-
-
-
-
 
 </LinearLayout>

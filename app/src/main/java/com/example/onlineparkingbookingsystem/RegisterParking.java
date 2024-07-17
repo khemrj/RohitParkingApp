@@ -37,15 +37,20 @@ public class RegisterParking extends AppCompatActivity {
     private LinearLayout container;
     List<String> vehicleNamesList = new ArrayList<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_parking);
 
         container = findViewById(R.id.LinearLayout);
-        getVehicleList();
+       getVehicleList();
 
 
+for( int i = 0; i<vehicleNamesList.size();i++){
+
+
+}
 
 
 
@@ -79,7 +84,7 @@ public class RegisterParking extends AppCompatActivity {
         String latitude = sharedPreferences.getString("latitude", null);
         String longitude = sharedPreferences.getString("longitude", null);
 
-        String url = "http://192.168.1.23:8080/rohit/place";
+        String url = "http://192.168.1.69:8080/rohit/place";
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         JSONObject jsonRequest = new JSONObject();
@@ -141,13 +146,10 @@ public class RegisterParking extends AppCompatActivity {
     }
 
     public void getVehicleList() {
-        String URL = "http://192.168.1.23:8080/rohit/category";
+        String URL = "http://192.168.1.69:8080/rohit/category";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                URL,
-                null,
-                new Response.Listener<JSONArray>() {
+                Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d("khem", "hey" + response.toString());
@@ -155,19 +157,17 @@ public class RegisterParking extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
-                                vehicleNamesList.add(jsonObject.getString("name"));
+                                EditText editText = new EditText(getApplicationContext());
+
+                                editText.setHint("Enter price for "+ jsonObject.getString("name"));
+                                container.addView(editText);
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
                         }
 
                         // Update the UI after fetching the vehicle names
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateUIWithVehicleNames();
-                            }
-                        });
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -183,22 +183,5 @@ public class RegisterParking extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
     }
 
-    private void updateUIWithVehicleNames() {
-        // Access each component in the list and create an EditText for each vehicle name
-        for (String vehicleName : vehicleNamesList) {
-            EditText editText = new EditText(this);
-            editText.setHint("Enter price per hour for " + vehicleName);
 
-            // Set layout parameters for the EditText
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            params.setMargins(0, 16, 0, 16); // Add some margin
-            editText.setLayoutParams(params);
-
-            // Add the EditText to the container
-            container.addView(editText);
-        }
-    }
 }
