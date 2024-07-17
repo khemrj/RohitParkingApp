@@ -21,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -32,10 +33,12 @@ import java.util.List;
 
 public class RegisterParking extends AppCompatActivity {
     private Button registerParkingArea;
+    String parkingPlaceId;
     private Double lat1, lon1;
     private EditText ownerName, address, phoneNo, parkingPlaceName;
     private LinearLayout container;
-    List<String> vehicleNamesList = new ArrayList<>();
+    List<Integer> vehicleId = new ArrayList<>();
+    private ArrayList<EditText> editTextList = new ArrayList<>();
 
 
     @Override
@@ -47,10 +50,6 @@ public class RegisterParking extends AppCompatActivity {
        getVehicleList();
 
 
-for( int i = 0; i<vehicleNamesList.size();i++){
-
-
-}
 
 
 
@@ -75,6 +74,16 @@ for( int i = 0; i<vehicleNamesList.size();i++){
             public void onClick(View v) {
                 GeoCodeLocation locationAddress = new GeoCodeLocation();
                 locationAddress.getAddressFromLocation(address.getText().toString(), getApplicationContext(), new GeoCoderHandler());
+//                for( int i = 0; i<editTextList.size();i++){
+//                    EditText editText = editTextList.get(i);// for debugging
+//                    String text = editText.getText().toString();
+//                    Toast.makeText(RegisterParking.this,text, Toast.LENGTH_SHORT).show();
+//                }
+                sendData();
+                savePrice();
+                Intent intent = new Intent(RegisterParking.this, Dashboard.class);
+                startActivity(intent);
+
             }
         });
     }
@@ -105,8 +114,8 @@ for( int i = 0; i<vehicleNamesList.size();i++){
                 try {
                     Toast.makeText(RegisterParking.this, "Registered", Toast.LENGTH_SHORT).show();
                     Log.v("Response", response.toString());
-                    Intent intent = new Intent(RegisterParking.this, Dashboard.class);
-                    startActivity(intent);
+                    parkingPlaceId = response.getString("parkingPlaceId");
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -140,7 +149,6 @@ for( int i = 0; i<vehicleNamesList.size();i++){
             editor.putString("latitude", parts[0]);
             editor.putString("longitude", parts[1]);
             editor.apply();
-            sendData();
             Log.d("Location1", locationAddress);
         }
     }
@@ -158,8 +166,10 @@ for( int i = 0; i<vehicleNamesList.size();i++){
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
                                 EditText editText = new EditText(getApplicationContext());
-
+                                editText.setId(i+1);
+                                vehicleId.add(Integer.parseInt(jsonObject.getString("categoryId")));
                                 editText.setHint("Enter price for "+ jsonObject.getString("name"));
+                                editTextList.add(editText);
                                 container.addView(editText);
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
@@ -182,6 +192,42 @@ for( int i = 0; i<vehicleNamesList.size();i++){
         // Add the request to the RequestQueue
         requestQueue.add(jsonArrayRequest);
     }
+public void savePrice(){
+    String url = "http://192.168.1.69:8080/rohit/parkingPricesave";
+    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
+    JSONObject jsonRequest = new JSONObject();
+    JSONArray jsonArray = new JSONArray();
+    for( int i = 0; i<vehicleId.size();i++){
+        try {
+            jsonRequest.put("ParkingPlaceId",parkingPlaceId);
+            jsonRequest.put("category_id", vehicleId.get(i));
+            jsonRequest.put("pricePerHrs", editTextList.get(i).getText());
+            jsonArray.put(jsonRequest);
+        } catch (JSONException e) {
+            Log.d("parkingArea", e.toString());
+        }
+    }
+
+    JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url, jsonArray, new Response.Listener<JSONArray>() {
+        @Override
+        public void onResponse(JSONArray response) {
+            try {
+                Toast.makeText(RegisterParking.this, "price saved", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Log.e("VolleyError", error.toString());
+            Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+    });
+        Log.d("Array sent is ", jsonArray.toString());
+    requestQueue.add(jsonArrayRequest);
+
+}
 
 }
