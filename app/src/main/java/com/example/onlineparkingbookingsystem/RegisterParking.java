@@ -199,10 +199,10 @@ public void savePrice(){
     for( int i = 0; i<vehicleId.size();i++){
         try {
             JSONObject jsonRequest = new JSONObject();
-            jsonRequest.put("CategoryId", vehicleId.get(i));
+            jsonRequest.put("categoryId", vehicleId.get(i));
             jsonRequest.put("pricePerHrs", editTextList.get(i).getText());
-            Log.d("parkingplaceId",parkingPlaceId);
             jsonRequest.put("parkingPlaceId",parkingPlaceId);
+            jsonRequest.put("category_id",vehicleId.get(i).toString());
             jsonArray.put(jsonRequest);
         } catch (JSONException e) {
             Log.d("parkingArea", e.toString());
