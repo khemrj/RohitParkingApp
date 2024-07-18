@@ -80,9 +80,7 @@ public class RegisterParking extends AppCompatActivity {
 //                    Toast.makeText(RegisterParking.this,text, Toast.LENGTH_SHORT).show();
 //                }
                 sendData();
-                savePrice();
-                Intent intent = new Intent(RegisterParking.this, Dashboard.class);
-                startActivity(intent);
+
 
             }
         });
@@ -115,6 +113,7 @@ public class RegisterParking extends AppCompatActivity {
                     Toast.makeText(RegisterParking.this, "Registered", Toast.LENGTH_SHORT).show();
                     Log.v("Response", response.toString());
                     parkingPlaceId = response.getString("parkingPlaceId");
+                    savePrice();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -166,7 +165,6 @@ public class RegisterParking extends AppCompatActivity {
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
                                 EditText editText = new EditText(getApplicationContext());
-                                editText.setId(i+1);
                                 vehicleId.add(Integer.parseInt(jsonObject.getString("categoryId")));
                                 editText.setHint("Enter price for "+ jsonObject.getString("name"));
                                 editTextList.add(editText);
@@ -196,13 +194,15 @@ public void savePrice(){
     String url = "http://192.168.1.69:8080/rohit/parkingPricesave";
     RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
-    JSONObject jsonRequest = new JSONObject();
+
     JSONArray jsonArray = new JSONArray();
     for( int i = 0; i<vehicleId.size();i++){
         try {
-            jsonRequest.put("ParkingPlaceId",parkingPlaceId);
-            jsonRequest.put("category_id", vehicleId.get(i));
+            JSONObject jsonRequest = new JSONObject();
+            jsonRequest.put("CategoryId", vehicleId.get(i));
             jsonRequest.put("pricePerHrs", editTextList.get(i).getText());
+            Log.d("parkingplaceId",parkingPlaceId);
+            jsonRequest.put("parkingPlaceId",parkingPlaceId);
             jsonArray.put(jsonRequest);
         } catch (JSONException e) {
             Log.d("parkingArea", e.toString());
@@ -214,6 +214,8 @@ public void savePrice(){
         public void onResponse(JSONArray response) {
             try {
                 Toast.makeText(RegisterParking.this, "price saved", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(RegisterParking.this, Dashboard.class);
+                startActivity(intent);
             } catch (Exception e) {
                 e.printStackTrace();
             }
