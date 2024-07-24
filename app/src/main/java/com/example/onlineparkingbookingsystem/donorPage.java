@@ -91,7 +91,7 @@ public class donorPage extends AppCompatActivity {
                                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                                 String price = jsonObject.getString("pricePerHour");
                                 String distance = trimAfterDecimal(jsonObject.getString("distance"),2);
-                                arrDonor.add(new ParkingPlaceModel(jsonObject.getString("placeName"),jsonObject.getString("address"),distance,price));
+                                arrDonor.add(new ParkingPlaceModel(jsonObject.getString("placeName"),jsonObject.getString("address"),distance,price,jsonObject.getString("parkingPlaceId")));
                                 RecyclerDonorAdapter adapter=new RecyclerDonorAdapter(getApplicationContext(),arrDonor);
                                 recyclerView.setAdapter(adapter);
                             } catch (JSONException e) {

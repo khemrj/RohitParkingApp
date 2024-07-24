@@ -8,16 +8,17 @@ public class ParkingPlaceModel {
 
     String placeName;
     String distance;
-    String location;
+    String location,parkingPlaceId;
     String price;
     boolean Bookbutton; //yo ta visible grna lagi ho
 
-    public ParkingPlaceModel(String placeName,String location,String distance,String price) {
+    public ParkingPlaceModel(String placeName,String location,String distance,String price,String parkingPlaceId) {
         // Initialize other properties as before
         this.placeName = placeName;
         this.location=location;
         this.distance = distance;
         this.price = price;
+        this.parkingPlaceId= parkingPlaceId;
         // this.acceptButtonVisible = true;// Set the button initially visible yo t button visible garna lagi ho but hamilai button cahiyo
 // Initialize other properties as before
 

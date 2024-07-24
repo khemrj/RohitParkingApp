@@ -28,6 +28,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
 public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdapter.ViewHolder> {
     @NonNull
@@ -55,6 +56,7 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
         holder.txtPrice.setText( arrDonor.get(position).distance+ " KM");
         holder.txtLocation.setText("Location: " + arrDonor.get(position).location);
         holder.pricePerHour.setText("Rs."+ arrDonor.get(position).price);
+        holder.parkingPlaceId.setText(arrDonor.get(position).parkingPlaceId);
 
     }
 
@@ -65,6 +67,7 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView parkingPlaceId;
         TextView txtName, txtLocation,txtPrice;
         TextView pricePerHour;
         ImageView imgContact;
@@ -75,6 +78,7 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imgContact = itemView.findViewById(R.id.imageContact);
+            parkingPlaceId = itemView.findViewById(R.id.parkingPlaceId);
             txtName = itemView.findViewById(R.id.name);
             pricePerHour =itemView.findViewById(R.id.pricePerHour);
             txtLocation = itemView.findViewById(R.id.location);
@@ -83,14 +87,13 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   BookParkingPlace(pricePerHour.getText().toString());
-
-
+                   BookParkingPlace(pricePerHour.getText().toString(),parkingPlaceId.getText().toString());
+                    Toast.makeText(context.getApplicationContext(), "id is" + parkingPlaceId.getText(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
     }
-    public void BookParkingPlace(String amount){
+    public void BookParkingPlace(String amount,String parkingPlaceId){
         SharedPreferences sharedPreferences = context.getSharedPreferences("url_prefs", Context.MODE_PRIVATE);
        String from = sharedPreferences.getString("from",null);
        String to = sharedPreferences.getString("to",null);
@@ -102,6 +105,8 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
             jsonRequest.put("from", from);
             jsonRequest.put("to", to);
             jsonRequest.put("amount",amount);
+            jsonRequest.put("parkingPlaceId",parkingPlaceId);
+
         } catch (JSONException e) {
             Log.d("parkingArea", e.toString());
         }

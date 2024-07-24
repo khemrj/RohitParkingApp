@@ -67,6 +67,12 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/parkingPlaceId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:text="TextView" />
+
+                <TextView
                     android:id="@+id/distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
