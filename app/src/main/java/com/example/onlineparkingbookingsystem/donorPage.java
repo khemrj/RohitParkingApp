@@ -28,6 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class donorPage extends AppCompatActivity {
@@ -48,23 +50,10 @@ public class donorPage extends AppCompatActivity {
             Log.d("errorIntent","empty intent");
         }
 
-//        SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
-//        String address = sharedPreferences.getString("address",null);
-       // Log.d("sharedAddress","  "+address);
+
 
         getNearestPlaces();
-//        RecyclerView recyclerView=findViewById(R.id.recyclerdonor);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//        arrDonor.add(new ParkingPlaceModel("Suman Thakur","Dhangadhi"));
-//        arrDonor.add(new ParkingPlaceModel("Suman Thakur","Dhangadhi"));
-//        arrDonor.add(new ParkingPlaceModel("Suman Thakur","Dhangadhi"));
-//        arrDonor.add(new ParkingPlaceModel("Suman Thakur","Dhangadhi"));
-//        arrDonor.add(new ParkingPlaceModel("Suman Thakur","Dhangadhi"));
-//        arrDonor.add(new ParkingPlaceModel("Suman Thakur","Dhangadhi"));
-//
-//        RecyclerDonorAdapter adapter=new RecyclerDonorAdapter(this,arrDonor);
-//        recyclerView.setAdapter(adapter);
+
 
 
     }
@@ -90,8 +79,9 @@ public class donorPage extends AppCompatActivity {
                                 JSONObject jsonObject = response.getJSONObject(i);
                                 RecyclerView recyclerView=findViewById(R.id.recyclerdonor);
                                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                                String distance = trimAfterDecimal(jsonObject.getString("distance"),2);
 
-                                arrDonor.add(new ParkingPlaceModel(jsonObject.getString("placeName"),jsonObject.getString("address"),"2"));
+                                arrDonor.add(new ParkingPlaceModel(jsonObject.getString("placeName"),jsonObject.getString("address"),distance));
                                 RecyclerDonorAdapter adapter=new RecyclerDonorAdapter(getApplicationContext(),arrDonor);
                                 recyclerView.setAdapter(adapter);
 
@@ -117,6 +107,24 @@ public class donorPage extends AppCompatActivity {
         // Add the request to the RequestQueue
         requestQueue.add(jsonArrayRequest);
 
+    }
+    public static String trimAfterDecimal(String str, int numDigitsAfterDecimal) {
+        int decimalIndex = str.indexOf(".");
+
+        if (decimalIndex == -1) {
+            // No decimal point found, return original string
+            return str;
+        }
+
+        // Calculate the end index for the substring
+        int endIndex = decimalIndex + numDigitsAfterDecimal + 1;
+
+        if (endIndex > str.length()) {
+            // If endIndex exceeds string length, return original string
+            return str;
+        }
+
+        return str.substring(0, endIndex);
     }
 
 

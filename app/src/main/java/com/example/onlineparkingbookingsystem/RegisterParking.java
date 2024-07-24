@@ -35,6 +35,7 @@ public class RegisterParking extends AppCompatActivity {
     private Button registerParkingArea;
     String parkingPlaceId;
     private Double lat1, lon1;
+    private String OwnerName, Adress, PhoneNO,ParkingPlaceName;
     private EditText ownerName, address, phoneNo, parkingPlaceName;
     private LinearLayout container;
     List<Integer> vehicleId = new ArrayList<>();
@@ -72,14 +73,18 @@ public class RegisterParking extends AppCompatActivity {
         registerParkingArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                OwnerName = ownerName.getText().toString();
+                        Adress = address.getText().toString();
+                        PhoneNO = phoneNo.getText().toString();
+                        ParkingPlaceName = parkingPlaceName.getText().toString();
+
                 GeoCodeLocation locationAddress = new GeoCodeLocation();
-                locationAddress.getAddressFromLocation(address.getText().toString(), getApplicationContext(), new GeoCoderHandler());
+                locationAddress.getAddressFromLocation(Adress, getApplicationContext(), new GeoCoderHandler());
 //                for( int i = 0; i<editTextList.size();i++){
 //                    EditText editText = editTextList.get(i);// for debugging
 //                    String text = editText.getText().toString();
 //                    Toast.makeText(RegisterParking.this,text, Toast.LENGTH_SHORT).show();
 //                }
-                sendData();
 
 
             }
@@ -96,10 +101,10 @@ public class RegisterParking extends AppCompatActivity {
 
         JSONObject jsonRequest = new JSONObject();
         try {
-            jsonRequest.put("ownerName", ownerName.getText().toString());
-            jsonRequest.put("placeName", parkingPlaceName.getText().toString());
-            jsonRequest.put("phoneNumber", phoneNo.getText().toString());
-            jsonRequest.put("address", address.getText().toString());
+            jsonRequest.put("ownerName", OwnerName);
+            jsonRequest.put("placeName", ParkingPlaceName);
+            jsonRequest.put("phoneNumber", PhoneNO);
+            jsonRequest.put("address", Adress);
             jsonRequest.put("latitude", latitude);
             jsonRequest.put("longitude", longitude);
         } catch (JSONException e) {
@@ -148,6 +153,7 @@ public class RegisterParking extends AppCompatActivity {
             editor.putString("latitude", parts[0]);
             editor.putString("longitude", parts[1]);
             editor.apply();
+            sendData();
             Log.d("Location1", locationAddress);
         }
     }

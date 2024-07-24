@@ -36,11 +36,7 @@ public class parkingNearMe extends AppCompatActivity {
     private Spinner spinner;
     private EditText location,to, from ;
     private String lat, lon;
-
     Button button ;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +52,8 @@ public class parkingNearMe extends AppCompatActivity {
                 GeoCodeLocation locationAddress = new GeoCodeLocation();
                 Log.d("locationone"," m"+location.getText().toString());
                 locationAddress.getAddressFromLocation(location.getText().toString(), getApplicationContext(), new GeoCoderHandler());
-
             }
         });
-
     }
     private class GeoCoderHandler extends Handler {
         @Override
@@ -73,14 +67,8 @@ public class parkingNearMe extends AppCompatActivity {
                 default:
                     locationAddress = null;
             }
-//            SharedPreferences sharedPreferences = getSharedPreferences("Rohit", Context.MODE_PRIVATE);
-//            SharedPreferences.Editor editor = sharedPreferences.edit();
             String[] parts = locationAddress.split(" ");
-//            lat = parts[0];
-//            lon = parts[1];
-//            editor.putString("latitude11",parts[0]);
-//            editor.putString("longitude11",parts[1]);
-//            editor.apply();
+
             Intent intent = new Intent(parkingNearMe.this, donorPage.class);
             intent.putExtra("latitude", parts[0]);
             intent.putExtra("longitude",parts[1]);
