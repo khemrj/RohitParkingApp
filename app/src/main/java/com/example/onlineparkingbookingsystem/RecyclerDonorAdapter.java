@@ -36,9 +36,9 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //here problem is showning don't treat position as fixed ;only use immedately and call 'holder.getAdapterPosition()' to look it up later in this fun public void onBindViewHolder(@NonNull ViewHolder holder, int position)
         int adapterPosition = holder.getAdapterPosition();
-        holder.txtName.setText(arrDonor.get(position).placeName);
-        holder.txtPrice.setText( arrDonor.get(position).distance);
-        holder.txtLocation.setText(arrDonor.get(position).location);
+        holder.txtName.setText("PlaceName:"+arrDonor.get(position).placeName);
+        holder.txtPrice.setText( arrDonor.get(position).distance+ " KM");
+        holder.txtLocation.setText("Location: " + arrDonor.get(position).location);
 
     }
 
