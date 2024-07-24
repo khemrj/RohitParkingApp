@@ -83,13 +83,14 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                   BookParkingPlace(pricePerHour.getText().toString());
 
-                   BookParkingPlace();
+
                 }
             });
         }
     }
-    public void BookParkingPlace(){
+    public void BookParkingPlace(String amount){
         SharedPreferences sharedPreferences = context.getSharedPreferences("url_prefs", Context.MODE_PRIVATE);
        String from = sharedPreferences.getString("from",null);
        String to = sharedPreferences.getString("to",null);
@@ -100,7 +101,7 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
         try {
             jsonRequest.put("from", from);
             jsonRequest.put("to", to);
-            jsonRequest.put("amount",5);
+            jsonRequest.put("amount",amount);
         } catch (JSONException e) {
             Log.d("parkingArea", e.toString());
         }
