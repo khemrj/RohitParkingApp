@@ -91,7 +91,7 @@ public class RegisterParking extends AppCompatActivity {
         String latitude = sharedPreferences.getString("latitude", null);
         String longitude = sharedPreferences.getString("longitude", null);
 
-        String url = "http://192.168.1.69:8080/rohit/place";
+        String url = "http://192.168.1.21:8080/rohit/place";
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         JSONObject jsonRequest = new JSONObject();
@@ -153,7 +153,7 @@ public class RegisterParking extends AppCompatActivity {
     }
 
     public void getVehicleList() {
-        String URL = "http://192.168.1.69:8080/rohit/category";
+        String URL = "http://192.168.1.21:8080/rohit/category";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
@@ -191,7 +191,7 @@ public class RegisterParking extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
     }
 public void savePrice(){
-    String url = "http://192.168.1.69:8080/rohit/parkingPricesave";
+    String url = "http://192.168.1.21:8080/rohit/parkingPricesave";
     RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
 
