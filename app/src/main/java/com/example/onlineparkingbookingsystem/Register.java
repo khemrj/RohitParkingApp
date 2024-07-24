@@ -58,7 +58,6 @@ public class Register extends AppCompatActivity {
 
         String url = "http://192.168.1.21:8080/rohit/user";
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-
         JSONObject jsonRequest = new JSONObject();
         try {
             jsonRequest.put("fullName", fullName.getText().toString());

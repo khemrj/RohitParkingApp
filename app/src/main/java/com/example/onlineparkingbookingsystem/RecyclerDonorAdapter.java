@@ -1,6 +1,8 @@
 package com.example.onlineparkingbookingsystem;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,19 +10,31 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import java.util.ArrayList;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdapter.ViewHolder> {
     @NonNull
     Context context;
     String imageButton;//EX09april
     Button accept;
+    TimePicker from, to;
+
     ArrayList<ParkingPlaceModel> arrDonor;
     RecyclerDonorAdapter(@NonNull Context context, ArrayList<ParkingPlaceModel> arrDonor) {
         this.context = context;
@@ -65,9 +79,48 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context.getApplicationContext(), "paisa tir paila", Toast.LENGTH_LONG).show();
+
+                   // BookParkingPlace();
                 }
             });
         }
+    }
+    public void BookParkingPlace(){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("url_prefs", Context.MODE_PRIVATE);
+       String from = sharedPreferences.getString("from",null);
+       String to = sharedPreferences.getString("to",null);
+        String url = "http://192.168.1.21:8080/rohit/bookPlace";
+        RequestQueue requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+
+        JSONObject jsonRequest = new JSONObject();
+        try {
+            jsonRequest.put("from", from);
+            jsonRequest.put("to", to);
+            jsonRequest.put("amount", );
+        } catch (JSONException e) {
+            Log.d("parkingArea", e.toString());
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Toast.makeText(RegisterParking.this, "Registered", Toast.LENGTH_SHORT).show();
+                    Log.v("Response", response.toString());
+                    parkingPlaceId = response.getString("parkingPlaceId");
+                    savePrice();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VolleyError", error.toString());
+                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
     }
 }

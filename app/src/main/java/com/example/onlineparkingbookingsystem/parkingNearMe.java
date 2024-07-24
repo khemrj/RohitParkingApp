@@ -12,10 +12,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -34,7 +37,9 @@ import java.util.List;
 
 public class parkingNearMe extends AppCompatActivity {
     private Spinner spinner;
-    private EditText location,to, from ;
+    private EditText location ;
+    EditText et_to, et_from;
+    String from, to,catName;
     private String lat, lon;
     Button button ;
     @Override
@@ -42,13 +47,41 @@ public class parkingNearMe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parking_near_me);
         spinner = findViewById(R.id.spinner);
+        String[] items = {"Bus", "Car", "Auto-rikshaw", "Bike","Train"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Step 4: Initialize the variable based on the selected item
+                catName = parent.getItemAtPosition(position).toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
+
         location = findViewById(R.id.location);
-        to = findViewById(R.id.to);
-        from = findViewById(R.id.from);
+        et_to = findViewById(R.id.to);
+
+        et_from = findViewById(R.id.from);
         button = findViewById(R.id.search);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                to = et_to.getText().toString();
+                from = et_from.getText().toString();
+                SharedPreferences sharedPreferences = getSharedPreferences("url_prefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("to",to);
+                editor.putString("from",from);
+                editor.apply();
                 GeoCodeLocation locationAddress = new GeoCodeLocation();
                 Log.d("locationone"," m"+location.getText().toString());
                 locationAddress.getAddressFromLocation(location.getText().toString(), getApplicationContext(), new GeoCoderHandler());
@@ -72,6 +105,9 @@ public class parkingNearMe extends AppCompatActivity {
             Intent intent = new Intent(parkingNearMe.this, donorPage.class);
             intent.putExtra("latitude", parts[0]);
             intent.putExtra("longitude",parts[1]);
+
+
+
             startActivity(intent);
             Log.d("Location1",locationAddress);
 
