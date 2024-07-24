@@ -26,6 +26,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -74,7 +75,7 @@ public class parkingNearMe extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                setVehicleId();
                 to = et_to.getText().toString();
                 from = et_from.getText().toString();
                 SharedPreferences sharedPreferences = getSharedPreferences("url_prefs", Context.MODE_PRIVATE);
@@ -105,7 +106,7 @@ public class parkingNearMe extends AppCompatActivity {
             Intent intent = new Intent(parkingNearMe.this, donorPage.class);
             intent.putExtra("latitude", parts[0]);
             intent.putExtra("longitude",parts[1]);
-
+            intent.putExtra("catName",catName);
 
 
             startActivity(intent);
@@ -113,6 +114,37 @@ public class parkingNearMe extends AppCompatActivity {
 
         }
 
+
+    }
+    public void setVehicleId(){
+        String URL ="http://192.168.1.21:8080/rohit/findCatId/"+ catName ;
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("catId is ", "Response: " + response.toString());
+                        SharedPreferences sharedPreferences = getSharedPreferences("url_prefs", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("catId",response.toString());
+                        editor.apply();
+                        // Handle the JSON array response here
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("errorResponse", "Error: " + error.toString());
+                        // Handle error here
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue
+        requestQueue.add(stringRequest);
 
     }
 

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,6 +54,7 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
         holder.txtName.setText("PlaceName:"+arrDonor.get(position).placeName);
         holder.txtPrice.setText( arrDonor.get(position).distance+ " KM");
         holder.txtLocation.setText("Location: " + arrDonor.get(position).location);
+        holder.pricePerHour.setText("Rs."+ arrDonor.get(position).price);
 
     }
 
@@ -64,6 +66,7 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtName, txtLocation,txtPrice;
+        TextView pricePerHour;
         ImageView imgContact;
 
         Button acceptButton;
@@ -73,6 +76,7 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
             super(itemView);
             imgContact = itemView.findViewById(R.id.imageContact);
             txtName = itemView.findViewById(R.id.name);
+            pricePerHour =itemView.findViewById(R.id.pricePerHour);
             txtLocation = itemView.findViewById(R.id.location);
             txtPrice = itemView.findViewById(R.id.distance);
             accept = itemView.findViewById(R.id.acceptButton);
@@ -80,7 +84,7 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
                 @Override
                 public void onClick(View v) {
 
-                   // BookParkingPlace();
+                   BookParkingPlace();
                 }
             });
         }
@@ -96,7 +100,7 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
         try {
             jsonRequest.put("from", from);
             jsonRequest.put("to", to);
-            jsonRequest.put("amount", );
+            jsonRequest.put("amount",5);
         } catch (JSONException e) {
             Log.d("parkingArea", e.toString());
         }
@@ -104,21 +108,13 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                try {
-                    Toast.makeText(RegisterParking.this, "Registered", Toast.LENGTH_SHORT).show();
-                    Log.v("Response", response.toString());
-                    parkingPlaceId = response.getString("parkingPlaceId");
-                    savePrice();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Toast.makeText(context, "Parking booked for 1 hour", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyError", error.toString());
-                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context.getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(jsonObjectRequest);

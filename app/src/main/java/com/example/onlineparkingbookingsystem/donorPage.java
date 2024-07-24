@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -38,7 +40,7 @@ import java.util.ArrayList;
 public class donorPage extends AppCompatActivity {
     private Double lat1,lon1;
     private String  from, to,catName;;
-    Spinner sp_categoryName;
+    Spinner spinner;
     ArrayList<ParkingPlaceModel> arrDonor=new ArrayList<>();
     ImageButton imageButton;
 
@@ -46,18 +48,19 @@ public class donorPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donor_page);
+
         Intent intent = getIntent();
         if(intent!= null) {
             lat1 = Double.parseDouble(intent.getStringExtra("latitude"));
             lon1 = Double.parseDouble(intent.getStringExtra("longitude"));
+            catName = intent.getStringExtra("catName");
         }
         else{
             Log.d("errorIntent","empty intent");
         }
 
 
-//        categoryName=
-//        getNearestPlaces();
+  getNearestPlaces();
 
 
 
@@ -68,7 +71,9 @@ public class donorPage extends AppCompatActivity {
 //        String lat1 = sharedPreferences.getString("latitude11",null);
 //        String lon1 = sharedPreferences.getString("longitude11",null);
         Log.d("lat1","lat"+lat1+" "+lon1);
-        String URL ="http://192.168.1.21:8080/rohit/nearestPlace/"+lat1+"/"+lon1;
+        SharedPreferences sharedPreferences = getSharedPreferences("url_prefs", Context.MODE_PRIVATE);
+        String catId = sharedPreferences.getString("catId",null);
+        String URL ="http://192.168.1.21:8080/rohit/nearestPlace/"+lat1+"/"+lon1+"/"+ catId;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
@@ -84,11 +89,11 @@ public class donorPage extends AppCompatActivity {
                                 JSONObject jsonObject = response.getJSONObject(i);
                                 RecyclerView recyclerView=findViewById(R.id.recyclerdonor);
                                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                                String price = jsonObject.getString("pricePerHour");
                                 String distance = trimAfterDecimal(jsonObject.getString("distance"),2);
-                                arrDonor.add(new ParkingPlaceModel(jsonObject.getString("placeName"),jsonObject.getString("address"),distance));
+                                arrDonor.add(new ParkingPlaceModel(jsonObject.getString("placeName"),jsonObject.getString("address"),distance,price));
                                 RecyclerDonorAdapter adapter=new RecyclerDonorAdapter(getApplicationContext(),arrDonor);
                                 recyclerView.setAdapter(adapter);
-                                setVehicleId();
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
@@ -111,37 +116,7 @@ public class donorPage extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
 
     }
-    public void setVehicleId(){
-        String URL ="http://192.168.1.21:8080/rohit/findCatId/"+ catName ;
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.GET,
-                URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
 
-                        Log.d("catId is ", "Response: " + response.toString());
-                        SharedPreferences sharedPreferences = getSharedPreferences("url_prefs", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("catId",response.toString());
-                        editor.apply();
-                        // Handle the JSON array response here
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("errorResponse", "Error: " + error.toString());
-                        // Handle error here
-                    }
-                }
-        );
-
-        // Add the request to the RequestQueue
-        requestQueue.add(stringRequest);
-
-    }
     public static String trimAfterDecimal(String str, int numDigitsAfterDecimal) {
         int decimalIndex = str.indexOf(".");
 
