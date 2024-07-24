@@ -56,7 +56,7 @@ public class Register extends AppCompatActivity {
 
         final String[] Token = new String[1];
 
-        String url = "192.168.1.21:8080/rohit/user";
+        String url = "http://192.168.1.21:8080/rohit/user";
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         JSONObject jsonRequest = new JSONObject();
@@ -74,9 +74,8 @@ public class Register extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-
                     Log.e("Response",response.toString());
-
+                    Toast.makeText(Register.this, "Succussfully registered", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

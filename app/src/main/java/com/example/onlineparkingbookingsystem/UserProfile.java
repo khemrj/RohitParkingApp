@@ -50,7 +50,7 @@ Button updateButton;
     public void populateData(){
         SharedPreferences sharedPreferences = getSharedPreferences("url_prefs", Context.MODE_PRIVATE);
         String id = sharedPreferences.getString("userId",null);
-        String URL ="http://192.168.1.69:8080/rohit/user/" + id;
+        String URL ="http://192.168.1.21:8080/rohit/user/" + id;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -88,7 +88,7 @@ Button updateButton;
         SharedPreferences sharedPreferences = getSharedPreferences("url_prefs", Context.MODE_PRIVATE);
         String id = sharedPreferences.getString("userId",null);
         String pass = sharedPreferences.getString("password",null);
-        String url = "http://192.168.1.23:8080/rohit/user/"+id;
+        String url = "http://192.168.1.21:8080/rohit/user/"+id;
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JSONObject jsonRequest = new JSONObject();
         try {
@@ -116,7 +116,7 @@ Button updateButton;
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyError",error.toString());
-
+                Toast.makeText(UserProfile.this, "updated successful", Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
