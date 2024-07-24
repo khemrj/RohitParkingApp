@@ -2,6 +2,7 @@ package com.example.onlineparkingbookingsystem;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.icu.text.SimpleDateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,8 @@ import org.json.JSONObject;
 
 import java.text.BreakIterator;
 import java.util.ArrayList;
+import java.util.Date;
+
 public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdapter.ViewHolder> {
     @NonNull
     Context context;
@@ -97,15 +100,21 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
         SharedPreferences sharedPreferences = context.getSharedPreferences("url_prefs", Context.MODE_PRIVATE);
        String from = sharedPreferences.getString("from",null);
        String to = sharedPreferences.getString("to",null);
+       String catId = sharedPreferences.getString("catId",null);
+       String userId = sharedPreferences.getString("userId",null);
         String url = "http://192.168.1.21:8080/rohit/bookPlace";
         RequestQueue requestQueue = Volley.newRequestQueue(context.getApplicationContext());
-
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
         JSONObject jsonRequest = new JSONObject();
         try {
             jsonRequest.put("from", from);
             jsonRequest.put("to", to);
             jsonRequest.put("amount",amount);
             jsonRequest.put("parkingPlaceId",parkingPlaceId);
+            jsonRequest.put("category_id",catId);
+            jsonRequest.put("user_id",userId);
+            jsonRequest.put("date",formatter.format(date));
 
         } catch (JSONException e) {
             Log.d("parkingArea", e.toString());
