@@ -87,22 +87,13 @@
             android:backgroundTint="#87CEEB"
             />
 
-        <ProgressBar
-            android:layout_width="32dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminateTint="@color/purple"
-            android:id="@+id/progress_bar"
-            />
-
     </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout"
         android:id="@+id/logout_btn"
-        android:textStyle="bold"
-        />
+        android:layout_width="81dp"
+        android:layout_height="34dp"
+        android:text="Logout"
+        android:textStyle="bold" />
 
 </LinearLayout>

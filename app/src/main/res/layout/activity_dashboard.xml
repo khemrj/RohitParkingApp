@@ -28,12 +28,10 @@
                 android:background="@drawable/person"
                 android:contentDescription="notification"
                 android:contextClickable="true"
-                app:layout_constraintBottom_toTopOf="@+id/button4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/textView"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.122" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView"
@@ -77,19 +75,6 @@
                 app:layout_constraintVertical_bias="0.264" />
 
             <Button
-                android:id="@+id/button4"
-                android:layout_width="119dp"
-                android:layout_height="116dp"
-                android:backgroundTint="#040303"
-                android:text="User Profile"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.944"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.264" />
-
-            <Button
                 android:id="@+id/button5"
                 android:layout_width="119dp"
                 android:layout_height="116dp"
@@ -100,26 +85,11 @@
                 app:iconSize="25dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.044"
+                app:layout_constraintHorizontal_bias="0.944"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.476" />
+                app:layout_constraintVertical_bias="0.264" />
 
-            <Button
-                android:id="@+id/button6"
-                android:layout_width="119dp"
-                android:layout_height="116dp"
-                android:backgroundTint="#070707"
-                android:text="Rohit lulli"
-                app:icon="@android:drawable/ic_lock_idle_low_battery"
-                app:iconGravity="textTop"
-                app:iconSize="25dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.534"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.476" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
