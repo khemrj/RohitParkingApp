@@ -110,7 +110,7 @@ public class RecyclerDonorAdapter extends RecyclerView.Adapter<RecyclerDonorAdap
         try {
             jsonRequest.put("from", from);
             jsonRequest.put("to", to);
-            jsonRequest.put("amount",amount);
+            jsonRequest.put("amount",amount.substring(3));
             jsonRequest.put("parkingPlaceId",parkingPlaceId);
             jsonRequest.put("category_id",catId);
             jsonRequest.put("user_id",userId);

@@ -118,7 +118,7 @@ public class RegisterParking extends AppCompatActivity {
                     Toast.makeText(RegisterParking.this, "Registered", Toast.LENGTH_SHORT).show();
                     Log.v("Response", response.toString());
                     parkingPlaceId = response.getString("parkingPlaceId");
-                    savePrice();
+                    savePrice(parkingPlaceId);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -196,18 +196,17 @@ public class RegisterParking extends AppCompatActivity {
         // Add the request to the RequestQueue
         requestQueue.add(jsonArrayRequest);
     }
-public void savePrice(){
+public void savePrice(String id){
+
     String url = "http://192.168.1.21:8080/rohit/parkingPricesave";
     RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-
-
     JSONArray jsonArray = new JSONArray();
     for( int i = 0; i<vehicleId.size();i++){
         try {
             JSONObject jsonRequest = new JSONObject();
             jsonRequest.put("categoryId", vehicleId.get(i));
             jsonRequest.put("pricePerHrs", editTextList.get(i).getText());
-            jsonRequest.put("parkingPlaceId",parkingPlaceId);
+            jsonRequest.put("parkingPlaceId",id);
             jsonRequest.put("category_id",vehicleId.get(i).toString());
             jsonArray.put(jsonRequest);
         } catch (JSONException e) {
